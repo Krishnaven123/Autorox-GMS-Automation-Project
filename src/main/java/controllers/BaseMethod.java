@@ -18,9 +18,12 @@ import java.util.Map;
 import java.util.Properties;
 
 import javax.imageio.ImageIO;
+
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
@@ -33,6 +36,9 @@ import com.relevantcodes.extentreports.DisplayOrder;
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
+
+import ru.yandex.qatools.ashot.comparison.ImageDiff;
+import ru.yandex.qatools.ashot.comparison.ImageDiffer;
 
 /**
  * @Author Krishnaveni Vipparla
@@ -117,6 +123,28 @@ public class BaseMethod extends WebDriverFactory {
 
 		}
 	}
+	
+	public static boolean imageValidation(String realImage, WebElement displayedImage) throws Exception, Throwable {
+		boolean status = false;
+		WebElement logoImage = displayedImage;
+		BufferedImage expectedImage = ImageIO
+				.read(new File(System.getProperty("user.dir") + "\\Images\\" + realImage + ""));
+		File f = logoImage.getScreenshotAs(OutputType.FILE);
+		File saveImage = new File(System.getProperty("user.dir") + "\\Images\\" + "\\new.png\\");
+		FileUtils.copyFile(f, saveImage);
+		BufferedImage actualImage = ImageIO.read(f);
+		ImageDiffer imgDiff = new ImageDiffer();
+		ImageDiff diff = imgDiff.makeDiff(actualImage, expectedImage);
+		if (diff.hasDiff()) {
+			status = false;
+		} else {
+			status = true;
+		}
+		return status;
+	}
+	
+	
+	
 	@BeforeMethod
 	public static String setup(Method method) {
 		String testMethodName = method.getName();
