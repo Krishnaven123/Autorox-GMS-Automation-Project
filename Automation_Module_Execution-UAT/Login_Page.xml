@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Login_Page">
+	<listeners>
+		<listener
+			class-name="listeners.ExtentTestNGIReporterListener" />
+		<listener
+			class-name="com.automation.remarks.testng.VideoListener" />
+	</listeners>
+	<test thread-count="1" name="Login_Page">
+		<classes>
+			<class name="com.autorox.All_Pages_Test.Login_Page_Test" />
+		</classes>
+	</test> <!-- Test -->
+</suite> <!-- Suite -->
